@@ -1,0 +1,70 @@
+#!/bin/bash
+# //====================================================
+# //	System Request:Debian 9+/Ubuntu 18.04+/20+
+# //	Author:	bhoikfostyahya
+# //	Dscription: Xray Menu Management
+# //	email: admin@bhoikfostyahya.com
+# //  telegram: https://t.me/bhoikfost_yahya
+# //====================================================
+# // font color configuration | BHOIKFOST YAHYA AUTOSCRIPT
+red() { echo -e "\\033[32;1m${*}\ "; }
+domain=$(cat /etc/xray/domain)
+clear
+until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
+        echo -e "───────────────────────────"
+        echo -e "  Add Shadowsocks Account  "
+        echo -e "───────────────────────────"
+    
+    read -rp "User: " -e user
+    CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
+    
+    if [[ ${CLIENT_EXISTS} == '1' ]]; then
+        clear
+        echo -e "───────────────────────────"
+        echo -e "  Add Shadowsocks Account  "
+        echo -e "───────────────────────────"
+        echo ""
+        echo "please choose another name."
+        echo ""
+        echo -e "─────────────────────────── "
+        read -n 1 -s -r -p "Press any key to back on menu"
+        menu
+    fi
+done
+
+cipher="aes-128-gcm"
+uuid=$(cat /proc/sys/kernel/random/uuid)
+read -p "Expired (days): " masaaktif
+exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
+sed -i '/#ssws$/a\###& '"$user $exp"'\
+},{"password": "'""$uuid""'","method": "'""$cipher""'","email": "'""$user""'"' /etc/xray/config.json
+sed -i '/#ssgrpc$/a\###& '"$user $exp"'\
+},{"password": "'""$uuid""'","method": "'""$cipher""'","email": "'""$user""'"' /etc/xray/config.json
+echo $cipher:$uuid > /tmp/log
+shadowsocks_base64=$(cat /tmp/log)
+echo -n "${shadowsocks_base64}" | base64 > /tmp/log1
+shadowsocks_base64e=$(cat /tmp/log1)
+shadowsockslink="ss://${shadowsocks_base64e}@$domain:443?plugin=xray-plugin;mux=0;path=/ss-ws;host=$domain;tls#${user}"
+shadowsockslink1="ss://${shadowsocks_base64e}@$domain:443?plugin=xray-plugin;mux=0;serviceName=ss-grpc;host=$domain;tls#${user}"
+systemctl restart xray
+rm -rf /tmp/log
+rm -rf /tmp/log1
+systemctl restart xray > /dev/null 2>&1
+clear
+echo -e "───────────────────"
+echo -e "  SHDWSCK ACCOUNT"
+echo -e "───────────────────"
+echo -e "Remarks     : $user"
+echo -e "Domain      : $domain"
+echo -e "Cipers      : aes-128-gcm"
+echo -e "Path        : /ss-ws"
+echo -e "ServiceName : ss-grpc"
+echo -e "───────────────────"
+echo -e "Link TLS    : ${shadowsockslink}"
+echo -e "───────────────────"
+echo -e "Link gRPC   : ${shadowsockslink1}"
+echo -e "───────────────────"
+echo -e "Expired On  : $exp"
+echo -e "───────────────────"
+echo ""
+

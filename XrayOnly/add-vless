@@ -1,0 +1,63 @@
+#!/bin/bash
+# //====================================================
+# //	System Request:Debian 9+/Ubuntu 18.04+/20+
+# //	Author:	bhoikfostyahya
+# //	Dscription: Xray Menu Management
+# //	email: admin@bhoikfostyahya.com
+# //  telegram: https://t.me/bhoikfost_yahya
+# //====================================================
+# // font color configuration | BHOIKFOST YAHYA AUTOSCRIPT
+red() { echo -e "\\033[32;1m${*}\\033[0m"; }
+domain=$(cat /etc/xray/domain)
+clear
+until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${CLIENT_EXISTS} == '0' ]]; do
+    echo -e "───────────────────────────"
+    echo -e "   Add Xray/Vless Account  "
+    echo -e "───────────────────────────"
+    
+    read -rp "User: " -e user
+    CLIENT_EXISTS=$(grep -w $user /etc/xray/config.json | wc -l)
+    
+    if [[ ${CLIENT_EXISTS} == '1' ]]; then
+        clear
+        echo -e "───────────────────────────"
+        echo -e "   Add Xray/Vless Account  "
+        echo -e "───────────────────────────"
+        echo ""
+        echo "please choose another name."
+        echo ""
+        echo -e "───────────────────────────"
+    fi
+done
+uuid=$(cat /proc/sys/kernel/random/uuid)
+read -p "Expired (days): " masaaktif
+exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+sed -i '/#vless$/a\#& '"$user $exp"'\
+},{"id": "'""$uuid""'","email": "'""$user""'"' /etc/xray/config.json
+sed -i '/#vlessgrpc$/a\#& '"$user $exp"'\
+},{"id": "'""$uuid""'","email": "'""$user""'"' /etc/xray/config.json
+
+vlesslink1="vless://${uuid}@${domain}:443?path=/vless&security=tls&encryption=none&type=ws#${user}"
+vlesslink2="vless://${uuid}@${domain}:80?path=/vless&encryption=none&type=ws#${user}"
+vlesslink3="vless://${uuid}@${domain}:443?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc&sni=${domain}#${user}"
+systemctl restart xray
+clear
+echo -e "───────────────────"
+echo -e "   VLESS ACCOUNT   "
+echo -e "───────────────────"
+echo -e "Remarks     : ${user}"
+echo -e "Domain      : ${domain}"
+echo -e "Encryption  : none" 
+echo -e "Path        : /vless"
+echo -e "ServiceName : vless-grpc"
+echo -e "───────────────────"
+echo -e "Link TLS    : ${vlesslink1}"
+echo -e "───────────────────"
+echo -e "Link NTLS   : ${vlesslink2}"
+echo -e "───────────────────"
+echo -e "Link GRPC   : ${vlesslink3}"
+echo -e "───────────────────"
+echo -e "Expired On  : $exp"
+echo -e "───────────────────"
+echo ""
+
