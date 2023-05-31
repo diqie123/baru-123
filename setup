@@ -65,9 +65,9 @@ judge() {
 
 domain="cat /etc/xray/domain"
 cloudflare() {
-    DOMEN="gamblo.my.id"
+    DOMEN="gamblo.eu.org"
     sub=$(tr </dev/urandom -dc a-z0-9 | head -c5)
-    domain="${sub}.gamblo.my.id"
+    domain="${sub}.gamblo.eu.org"
     echo -e "${domain}" >/etc/xray/domain
     CF_ID="diqie.muharrom@gmail.com"
     CF_KEY="99e5de193d6a04b59265364c1c5bd42cb8fdb"
