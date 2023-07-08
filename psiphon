@@ -14,7 +14,7 @@ cp psiphon.zip /var/www/html
 cat >/usr/bin/psiphond << EOF
 #!/bin/bash
 
-cd /root/
+cd /etc/psiphon
 ./psiphond run
 EOF
 
