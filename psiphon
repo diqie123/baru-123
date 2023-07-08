@@ -39,6 +39,6 @@ systemctl enable psiphond
 systemctl restart psiphond
 #systemctl status psiphond
 
-echo "================"
-echo "${domain}:81/psiphon.zip"
-echo "================"
+echo "   ================"
+echo "   https://${domain}:81/psiphon.zip"
+echo "   ================"
