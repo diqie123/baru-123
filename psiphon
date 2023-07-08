@@ -1,6 +1,8 @@
 #!/bin/bash
 domain=$(cat /etc/xray/domain)
 ipsaya=$(wget -qO- ipinfo.io/ip)
+mkdir -p /etc/psiphon
+cd /etc/psiphon
 wget https://github.com/Psiphon-Labs/psiphon-tunnel-core-binaries/raw/master/psiphond/psiphond
 chmod +x psiphond
 ./psiphond --ipaddress ${ipsaya} --web 3000 --protocol SSH:3001 --protocol OSSH:3002 --protocol FRONTED-MEEK-OSSH:8443 generate
@@ -33,7 +35,7 @@ ExecStart=/usr/bin/psiphond
 WantedBy=multi-user.target
 
 EOF
-
+cd
 systemctl daemon-reload
 systemctl enable psiphond
 systemctl restart psiphond
