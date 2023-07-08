@@ -40,7 +40,9 @@ systemctl daemon-reload
 systemctl enable psiphond
 systemctl restart psiphond
 #systemctl status psiphond
-
-echo "   ================"
+rm -rf psiphon
+clear
+echo "   Psiphon Unlimited Speed FTVPN"
+echo "   ============================="
 echo "   https://${domain}:81/psiphon.zip"
-echo "   ================"
+echo "   ============================="
