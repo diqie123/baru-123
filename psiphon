@@ -1,5 +1,5 @@
 #!/bin/bash
-domain="cat /etc/xray/domain"
+domain=$(cat /etc/xray/domain)
 ipsaya=$(wget -qO- ipinfo.io/ip)
 wget https://github.com/Psiphon-Labs/psiphon-tunnel-core-binaries/raw/master/psiphond/psiphond
 chmod +x psiphond
