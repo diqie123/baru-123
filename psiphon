@@ -40,5 +40,5 @@ systemctl restart psiphond
 #systemctl status psiphond
 
 echo "================"
-echo "${domain}:81/psiphon.zip
+echo "${domain}:81/psiphon.zip"
 echo "================"
