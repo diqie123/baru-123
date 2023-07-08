@@ -42,7 +42,10 @@ systemctl restart psiphond
 #systemctl status psiphond
 rm -rf psiphon
 clear
-echo "   Psiphon Unlimited Speed FTVPN"
-echo "   ============================="
-echo "   https://${domain}:81/psiphon.zip"
-echo "   ============================="
+echo ""
+echo ""
+echo "Psiphon Unlimited Speed FTVPN"
+echo "============================="
+echo "https://${domain}:81/psiphon.zip"
+echo "============================="
+echo ""
