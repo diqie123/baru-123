@@ -15,6 +15,7 @@ cat >/usr/bin/psiphond << EOF
 cd /root/
 ./psiphond run
 EOF
+
 chmod +x /usr/bin/psiphond
 cat >/etc/systemd/system/psiphond.service << EOF
                                                                                    
@@ -32,6 +33,7 @@ ExecStart=/usr/bin/psiphond
 WantedBy=multi-user.target
 
 EOF
+
 systemctl daemon-reload
 systemctl enable psiphond
 systemctl restart psiphond
