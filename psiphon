@@ -1,0 +1,42 @@
+#!/bin/bash
+domain="cat /etc/xray/domain"
+myip="curl ip.sb"
+wget https://github.com/Psiphon-Labs/psiphon-tunnel-core-binaries/raw/master/psiphond/psiphond
+chmod +x psiphond
+./psiphond --ipaddress $myip --web 3000 --protocol SSH:3001 --protocol OSSH:3002 --protocol FRONTED-MEEK-OSSH:8443 generate
+cp *.dat psiphon.txt
+zip -r psiphon.zip psiphon.txt
+cp psiphon.zip /var/www/html
+
+#!/bin/bash
+cat >/usr/bin/psiphond << EOF
+#!/bin/bash
+
+cd /root/
+./psiphond run
+EOF
+chmod +x /usr/bin/psiphond
+cat >/etc/systemd/system/psiphond.service << EOF
+                                                                                   
+[Unit]
+Description=psiphond bot service
+Documentation=FighterTunnel
+After=syslog.target network-online.target
+
+[Service]
+User=root
+NoNewPrivileges=true
+ExecStart=/usr/bin/psiphond
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+systemctl daemon-reload
+systemctl enable psiphond
+systemctl restart psiphond
+#systemctl status psiphond
+
+echo "================"
+echo "${domain}:81/psiphon.zip
+echo "================"
